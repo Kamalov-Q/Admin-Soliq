@@ -1,10 +1,19 @@
-import { Button } from "./components/ui/button"
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Layout from '@/components/layout/Layout'
+import BlogsPage from '@/pages/BlogsPage'
+import NewsPage from '@/pages/NewsPage'
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <Button>Shadcn Button</Button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Navigate to="/blogs" replace />} />
+          <Route path="blogs" element={<BlogsPage />} />
+          <Route path="news" element={<NewsPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
