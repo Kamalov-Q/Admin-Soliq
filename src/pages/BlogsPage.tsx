@@ -108,7 +108,10 @@ export default function BlogsPage() {
                             <FileUpload
                                 type="video"
                                 currentUrl={formData.videoUrl}
-                                onUpload={(url) => setFormData({ ...formData, videoUrl: url })}
+                                onUpload={(url) => {
+                                    console.log(url, 'From file upload');
+                                    setFormData({ ...formData, videoUrl: url });
+                                }}
                             />
 
                             <Tabs defaultValue="en" className="w-full">
