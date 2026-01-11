@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Pencil, Trash2, Newspaper as NewspaperIcon, Loader2, User } from 'lucide-react'
+import { Plus, Pencil, Trash2, Newspaper as NewspaperIcon, Loader2, User, Calendar } from 'lucide-react'
 import { useNews } from '@/hooks/useNews'
 import type { News, CreateNews } from '@/types'
 import { Button } from '@/components/ui/button'
@@ -38,6 +38,7 @@ export default function NewsPage() {
         descriptionEn: '',
         imageUrl: '',
         author: '',
+        issuedAt: new Date().toISOString().slice(0, 16),
     })
 
     const resetForm = () => {
@@ -50,6 +51,7 @@ export default function NewsPage() {
             descriptionEn: '',
             imageUrl: '',
             author: '',
+            issuedAt: new Date().toISOString().slice(0, 16),
         })
         setEditingNews(null)
     }
@@ -76,6 +78,7 @@ export default function NewsPage() {
             descriptionEn: newsItem.descriptionEn,
             imageUrl: newsItem.imageUrl,
             author: newsItem.author,
+            issuedAt: new Date(newsItem.issuedAt).toISOString().slice(0, 16),
         })
         setOpen(true)
     }
@@ -136,6 +139,20 @@ export default function NewsPage() {
                                     placeholder="Enter author name"
                                     value={formData.author}
                                     onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="issuedAt">
+                                    <Calendar className="w-4 h-4 inline mr-2" />
+                                    Issue Date & Time
+                                </Label>
+                                <Input
+                                    id="issuedAt"
+                                    type="datetime-local"
+                                    value={formData.issuedAt}
+                                    onChange={(e) => setFormData({ ...formData, issuedAt: e.target.value })}
                                     required
                                 />
                             </div>
@@ -251,9 +268,15 @@ export default function NewsPage() {
                                         <NewspaperIcon className="w-3 h-3 mr-1" />
                                         Article
                                     </Badge>
-                                    <span className="text-xs text-muted-foreground">
-                                        {formatDate(item.createdAt)}
-                                    </span>
+                                    <div className="text-right">
+                                        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                                            <Calendar className="w-3 h-3" />
+                                            {formatDate(item.issuedAt)}
+                                        </div>
+                                        <span className="text-xs text-muted-foreground">
+                                            Created: {formatDate(item.createdAt)}
+                                        </span>
+                                    </div>
                                 </div>
                                 <CardTitle className="text-lg line-clamp-2">{item.titleEn}</CardTitle>
                                 <CardDescription className="flex items-center gap-1 mt-1">

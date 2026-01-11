@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Pencil, Trash2, Video as VideoIcon, Loader2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, Video as VideoIcon, Loader2, Calendar } from 'lucide-react'
 import { useBlogs } from '@/hooks/useBlogs'
 import type { Blog, CreateBlog } from '@/types'
 import { Button } from '@/components/ui/button'
@@ -33,10 +33,17 @@ export default function BlogsPage() {
         titleUz: '',
         titleRu: '',
         titleEn: '',
-    });
+        issuedAt: new Date().toISOString().slice(0, 16),
+    })
 
     const resetForm = () => {
-        setFormData({ videoUrl: '', titleUz: '', titleRu: '', titleEn: '' })
+        setFormData({
+            videoUrl: '',
+            titleUz: '',
+            titleRu: '',
+            titleEn: '',
+            issuedAt: new Date().toISOString().slice(0, 16),
+        })
         setEditingBlog(null)
     }
 
@@ -58,6 +65,7 @@ export default function BlogsPage() {
             titleUz: blog.titleUz,
             titleRu: blog.titleRu,
             titleEn: blog.titleEn,
+            issuedAt: new Date(blog.issuedAt).toISOString().slice(0, 16),
         })
         setOpen(true)
     }
@@ -108,11 +116,22 @@ export default function BlogsPage() {
                             <FileUpload
                                 type="video"
                                 currentUrl={formData.videoUrl}
-                                onUpload={(url) => {
-                                    console.log(url, 'From file upload');
-                                    setFormData({ ...formData, videoUrl: url });
-                                }}
+                                onUpload={(url) => setFormData({ ...formData, videoUrl: url })}
                             />
+
+                            <div className="space-y-2">
+                                <Label htmlFor="issuedAt">
+                                    <Calendar className="w-4 h-4 inline mr-2" />
+                                    Issue Date & Time
+                                </Label>
+                                <Input
+                                    id="issuedAt"
+                                    type="datetime-local"
+                                    value={formData.issuedAt}
+                                    onChange={(e) => setFormData({ ...formData, issuedAt: e.target.value })}
+                                    required
+                                />
+                            </div>
 
                             <Tabs defaultValue="en" className="w-full">
                                 <TabsList className="grid w-full grid-cols-3">
@@ -192,9 +211,15 @@ export default function BlogsPage() {
                                         <VideoIcon className="w-3 h-3 mr-1" />
                                         Video
                                     </Badge>
-                                    <span className="text-xs text-muted-foreground">
-                                        {formatDate(blog.createdAt)}
-                                    </span>
+                                    <div className="text-right">
+                                        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
+                                            <Calendar className="w-3 h-3" />
+                                            {formatDate(blog.issuedAt)}
+                                        </div>
+                                        <span className="text-xs text-muted-foreground">
+                                            Created: {formatDate(blog.createdAt)}
+                                        </span>
+                                    </div>
                                 </div>
                                 <CardTitle className="text-lg line-clamp-2">{blog.titleEn}</CardTitle>
                                 <CardDescription className="line-clamp-1">

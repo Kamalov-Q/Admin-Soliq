@@ -177,12 +177,12 @@ export default function FileUpload({ type, onUpload, currentUrl, label }: FileUp
                             <img
                                 src={preview}
                                 alt="Preview"
-                                className="w-full max-w-sm h-48 object-cover rounded-lg border shadow-sm"
+                                className="w-full max-w-sm aspect-video object-cover rounded-lg border shadow-sm"
                             />
                         ) : (
                             <video
                                 src={preview}
-                                className="w-full max-w-sm h-48 object-cover rounded-lg border shadow-sm"
+                                className="w-full max-w-sm aspect-video object-cover rounded-lg border shadow-sm"
                                 controls
                             />
                         )}
