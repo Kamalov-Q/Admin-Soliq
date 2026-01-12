@@ -4,7 +4,7 @@ export interface Blog {
   titleUz: string
   titleRu: string
   titleEn: string
-  issuedAt: string
+  releasedAt: string
   createdAt: string
   updatedAt: string
 }
@@ -19,7 +19,7 @@ export interface News {
   descriptionEn: string
   imageUrl: string
   author: string
-  issuedAt: string
+  releasedAt: string
   createdAt: string
   updatedAt: string
 }

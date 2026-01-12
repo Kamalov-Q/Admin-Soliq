@@ -3,6 +3,7 @@ import { Upload, Loader2, CheckCircle, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { uploadImage, uploadVideo } from '@/lib/uploadthing'
+import { toast } from 'sonner'
 
 interface FileUploadProps {
     type: 'image' | 'video'
@@ -22,26 +23,23 @@ export default function FileUpload({ type, onUpload, currentUrl, label }: FileUp
         const file = e.target.files?.[0]
         if (!file) return
 
-        // Validate file type
         if (type === 'image' && !file.type.startsWith('image/')) {
-            console.error(`Invalid file type`);
+            toast.error('Please select an image file')
             return
         }
 
         if (type === 'video' && !file.type.startsWith('video/')) {
-            console.error(`Invalid file type`);
+            toast.error('Please select a video file')
+            return
         }
 
-        // Validate file size
         const maxSize = type === 'image' ? 4 * 1024 * 1024 : 512 * 1024 * 1024
         if (file.size > maxSize) {
-            console.error(`File too large!`);
+            toast.error(`${type === 'image' ? 'Image' : 'Video'} must be less than ${type === 'image' ? '4MB' : '512MB'}`)
             return
         }
 
         setSelectedFile(file)
-
-        // Create preview URL
         const previewUrl = URL.createObjectURL(file)
         setPreview(previewUrl)
     }
@@ -54,7 +52,6 @@ export default function FileUpload({ type, onUpload, currentUrl, label }: FileUp
         setProgress(0)
 
         try {
-            // Simulate progress
             const progressInterval = setInterval(() => {
                 setProgress(prev => {
                     if (prev >= 90) {
@@ -67,26 +64,24 @@ export default function FileUpload({ type, onUpload, currentUrl, label }: FileUp
 
             let url: string
             if (type === 'image') {
-                console.log(selectedFile, 'Selected File')
                 url = await uploadImage(selectedFile)
-                console.log(url);
             } else {
                 url = await uploadVideo(selectedFile)
-                console.log(url);
             }
 
             clearInterval(progressInterval)
             setProgress(100)
 
-            // Update with actual URL
             setPreview(url)
             onUpload(url)
             setUploaded(true)
-            console.log(`Successfully updated`)
+
+            toast.success(`${type === 'image' ? 'Image' : 'Video'} uploaded successfully`)
 
             setTimeout(() => setUploaded(false), 2000)
         } catch (error: any) {
             console.error('Upload error:', error)
+            toast.error(error.response?.data?.message || error.message || 'Failed to upload file')
         } finally {
             setUploading(false)
             setProgress(0)
@@ -114,7 +109,6 @@ export default function FileUpload({ type, onUpload, currentUrl, label }: FileUp
                         variant="outline"
                         disabled={uploading}
                         onClick={() => document.getElementById(`file-${type}`)?.click()}
-                        className="relative"
                     >
                         <Upload className="w-4 h-4 mr-2" />
                         Select {type}
@@ -177,12 +171,12 @@ export default function FileUpload({ type, onUpload, currentUrl, label }: FileUp
                             <img
                                 src={preview}
                                 alt="Preview"
-                                className="w-full max-w-sm aspect-video object-cover rounded-lg border shadow-sm"
+                                className="w-full max-w-sm h-48 object-cover rounded-lg border shadow-sm"
                             />
                         ) : (
                             <video
                                 src={preview}
-                                className="w-full max-w-sm aspect-video object-cover rounded-lg border shadow-sm"
+                                className="w-full max-w-sm h-48 object-cover rounded-lg border shadow-sm"
                                 controls
                             />
                         )}

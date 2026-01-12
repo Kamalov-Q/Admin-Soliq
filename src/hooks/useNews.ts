@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import type { News, CreateNews, UpdateNews, PaginatedResponse } from '@/types'
+import { toast } from 'sonner'
 
 export const useNews = (page: number = 1, limit: number = 9) => {
   const queryClient = useQueryClient()
@@ -20,10 +21,10 @@ export const useNews = (page: number = 1, limit: number = 9) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['news'] })
-      console.log(`Successfully created news!`);
+      toast.success('News created successfully')
     },
     onError: (error: any) => {
-      console.error(`Error: ${error}`);
+      toast.error(error.response?.data?.message || 'Failed to create news')
     },
   })
 
@@ -34,10 +35,10 @@ export const useNews = (page: number = 1, limit: number = 9) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['news'] })
-      console.log(`Successfully updated news!`);
+      toast.success('News updated successfully')
     },
     onError: (error: any) => {
-      console.error(`Error: ${error}`);
+      toast.error(error.response?.data?.message || 'Failed to update news')
     },
   })
 
@@ -47,10 +48,10 @@ export const useNews = (page: number = 1, limit: number = 9) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['news'] })
-      console.log(`Successfully deleted news!`);
+      toast.success('News deleted successfully')
     },
     onError: (error: any) => {
-      console.error(`Error: ${error}`);
+      toast.error(error.response?.data?.message || 'Failed to delete news')
     },
   })
 

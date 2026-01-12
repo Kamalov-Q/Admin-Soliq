@@ -33,7 +33,7 @@ export default function BlogsPage() {
         titleUz: '',
         titleRu: '',
         titleEn: '',
-        issuedAt: new Date().toISOString().slice(0, 16),
+        releasedAt: new Date().toISOString().slice(0, 16),
     })
 
     const resetForm = () => {
@@ -42,7 +42,7 @@ export default function BlogsPage() {
             titleUz: '',
             titleRu: '',
             titleEn: '',
-            issuedAt: new Date().toISOString().slice(0, 16),
+            releasedAt: new Date().toISOString().slice(0, 16),
         })
         setEditingBlog(null)
     }
@@ -65,7 +65,7 @@ export default function BlogsPage() {
             titleUz: blog.titleUz,
             titleRu: blog.titleRu,
             titleEn: blog.titleEn,
-            issuedAt: new Date(blog.issuedAt).toISOString().slice(0, 16),
+            releasedAt: new Date(blog.releasedAt).toISOString().slice(0, 16),
         })
         setOpen(true)
     }
@@ -120,15 +120,15 @@ export default function BlogsPage() {
                             />
 
                             <div className="space-y-2">
-                                <Label htmlFor="issuedAt">
+                                <Label htmlFor="releasedAt">
                                     <Calendar className="w-4 h-4 inline mr-2" />
                                     Issue Date & Time
                                 </Label>
                                 <Input
-                                    id="issuedAt"
+                                    id="releasedAt"
                                     type="datetime-local"
-                                    value={formData.issuedAt}
-                                    onChange={(e) => setFormData({ ...formData, issuedAt: e.target.value })}
+                                    value={formData.releasedAt}
+                                    onChange={(e) => setFormData({ ...formData, releasedAt: e.target.value })}
                                     required
                                 />
                             </div>
@@ -214,7 +214,7 @@ export default function BlogsPage() {
                                     <div className="text-right">
                                         <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
                                             <Calendar className="w-3 h-3" />
-                                            {formatDate(blog.issuedAt)}
+                                            {formatDate(blog.releasedAt)}
                                         </div>
                                         <span className="text-xs text-muted-foreground">
                                             Created: {formatDate(blog.createdAt)}
@@ -229,7 +229,7 @@ export default function BlogsPage() {
                             <CardContent className="pb-3">
                                 <video
                                     src={blog.videoUrl}
-                                    className="w-full h-48 object-cover rounded-md"
+                                    className="w-full h-84 object-contain rounded-md"
                                     controls
                                 />
                             </CardContent>

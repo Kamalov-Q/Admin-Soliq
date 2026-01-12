@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import type { Blog, CreateBlog, UpdateBlog, PaginatedResponse } from '@/types'
+import { toast } from 'sonner'
 
 export const useBlogs = (page: number = 1, limit: number = 9) => {
   const queryClient = useQueryClient()
@@ -20,11 +21,10 @@ export const useBlogs = (page: number = 1, limit: number = 9) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogs'] })
-      console.log(`Successfully created blog!`);
-
+      toast.success('Blog created successfully')
     },
     onError: (error: any) => {
-      console.error(`Error: ${error}`);
+      toast.error(error.response?.data?.message || 'Failed to create blog')
     },
   })
 
@@ -35,11 +35,10 @@ export const useBlogs = (page: number = 1, limit: number = 9) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogs'] })
-      console.log(`Successfully updated blog!`);
-
+      toast.success('Blog updated successfully')
     },
     onError: (error: any) => {
-      console.error(`Error: ${error}`);
+      toast.error(error.response?.data?.message || 'Failed to update blog')
     },
   })
 
@@ -49,11 +48,10 @@ export const useBlogs = (page: number = 1, limit: number = 9) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogs'] })
-      console.log(`Succesfully deleted blog!`);
-
+      toast.success('Blog deleted successfully')
     },
     onError: (error: any) => {
-      console.error(`Error: ${error}`);
+      toast.error(error.response?.data?.message || 'Failed to delete blog')
     },
   })
 

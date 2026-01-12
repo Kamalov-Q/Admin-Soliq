@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import Layout from '@/components/layout/Layout'
 import BlogsPage from '@/pages/BlogsPage'
 import NewsPage from '@/pages/NewsPage'
@@ -13,6 +14,7 @@ function App() {
           <Route path="news" element={<NewsPage />} />
         </Route>
       </Routes>
+      <Toaster position="top-right" richColors />
     </BrowserRouter>
   )
 }
